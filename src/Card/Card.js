@@ -43,6 +43,11 @@ class Card extends Component {
      * Override the inline-styles of the root element.
      */
     style: PropTypes.object,
+
+    /**
+     * Override the inline-styles of the children element.
+     */
+    childrenStyle: PropTypes.object
   };
 
   static defaultProps = {
@@ -110,17 +115,22 @@ class Card extends Component {
     const addBottomPadding = (lastElement && (lastElement.type.muiName === 'CardText' ||
       lastElement.type.muiName === 'CardTitle'));
     const {
-      style,
+      style
+      childrenStyle,
       ...other,
     } = this.props;
 
     const mergedStyles = Object.assign({
       zIndex: 1,
     }, style);
+    
+    const childrenMergedStyles = Object.assign({
+      paddingBottom: addBottomPadding ? 8 : 0,
+    }, childrenStyle);
 
     return (
       <Paper {...other} style={mergedStyles}>
-        <div style={{paddingBottom: addBottomPadding ? 8 : 0}}>
+        <div style={childrenMergedStyles}>
           {newChildren}
         </div>
       </Paper>
