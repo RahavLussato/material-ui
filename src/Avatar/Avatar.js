@@ -18,14 +18,17 @@ function getStyles(props, context) {
       display: 'inline-block',
       textAlign: 'center',
       lineHeight: `${size}px`,
-      fontSize: size / 2 + 4,
+      fontSize: size / 2,
       borderRadius: '50%',
       height: size,
       width: size,
     },
     icon: {
       color: color || avatar.color,
-      margin: 8,
+      width: size * 0.6,
+      height: size * 0.6,
+      fontSize: size * 0.6,
+      margin: size * 0.2,
     },
   };
 
@@ -44,6 +47,8 @@ function getStyles(props, context) {
 }
 
 class Avatar extends Component {
+  static muiName = 'Avatar';
+
   static propTypes = {
     /**
      * The backgroundColor of the avatar. Does not apply to image avatars.

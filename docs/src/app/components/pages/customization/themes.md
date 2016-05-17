@@ -65,7 +65,7 @@ implemented in a hierarchical manner.
 ### Predefined themes
 
 We ship two base themes with Material-UI: light and dark. They are located
-under [`material-ui/lib/styles/baseThemes/`](https://github.com/callemall/material-ui/blob/master/src/styles/baseThemes/).
+under [`material-ui/styles/baseThemes/`](https://github.com/callemall/material-ui/blob/master/src/styles/baseThemes/).
 Custom themes may be defined similarly.
 The [`lightBaseTheme`](https://github.com/callemall/material-ui/blob/master/src/styles/baseThemes/lightBaseTheme.js)
 is the default so you will not need to do anything to use it.
@@ -188,7 +188,7 @@ until another render is triggered for that component leaving your application
 in a moody state.
 
 To see what are the values you can override, use the
-[source](https://github.com/callemall/material-ui/blob/master/src/getMuiTheme.js).
+[source](https://github.com/callemall/material-ui/blob/master/src/styles/getMuiTheme.js).
 The `lightBaseTheme` object looks like this (these are the defaults):
 
 ```js
@@ -198,7 +198,7 @@ grey100, grey300, grey400, grey500,
 pinkA200,
 white, darkBlack, fullBlack,
 } from 'material-ui/styles/colors';
-import ColorManipulator from 'material-ui/utils/color-manipulator';
+import {fade} from 'material-ui/utils/colorManipulator';
 
 const lightBaseTheme = {
   spacing: {
@@ -226,9 +226,9 @@ const lightBaseTheme = {
     alternateTextColor: white,
     canvasColor: white,
     borderColor: grey300,
-    disabledColor: ColorManipulator.fade(darkBlack, 0.3),
+    disabledColor: fade(darkBlack, 0.3),
     pickerHeaderColor: cyan500,
-    clockCircleColor: ColorManipulator.fade(darkBlack, 0.07),
+    clockCircleColor: fade(darkBlack, 0.07),
     shadowColor: fullBlack,
   },
 };

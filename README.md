@@ -42,13 +42,12 @@ Material-UI is available as an [npm package](https://www.npmjs.org/package/mater
 npm install material-ui
 ```
 
-Our next version (`0.15.0`) is coming soon! If you need React 15 support or want to preview our latest updates, you can install the current beta.
-
-**Pre-release channel (React 15 support)**
+**Pre-release channel**
 ```sh
 npm install material-ui@next
 ```
 
+Please note that `@next` will only point to pre-releases; to get the latest stable release use `@latest` instead.
 
 
 ### React-Tap-Event-Plugin
@@ -128,7 +127,7 @@ achieved in the following two ways:
 There are 2 projects that you can look at to get started. They can be found in the
 [examples folder](https://github.com/callemall/material-ui/tree/master/examples).
 These projects are basic examples that show how to consume material-ui components
-in your own project. The first project uses [browserify](http://browserify.org/
+in your own project. The first project uses [browserify](http://browserify.org/)
 for module bundling and [gulp](http://gulpjs.com/) for JS task automation,
 while the second project uses [webpack](http://webpack.github.io/) for module bundling and building.
 
@@ -153,6 +152,11 @@ and plan on adding to it and making it better. If you'd like to help,
 check out the [docs folder](https://github.com/callemall/material-ui/tree/master/docs).
 We'd greatly appreciate any [contribution](https://github.com/callemall/material-ui/blob/master/CONTRIBUTING.md)
 you make. :)
+
+## Thanks
+
+[<img src="https://www.browserstack.com/images/mail/browserstack-logo-footer.png" width="120">](https://www.browserstack.com/)  
+Thank you to [BrowserStack](https://www.browserstack.com/) for providing the infrastructure that allows us to test `material-ui` in real browsers.
 
 ## License
 This project is licensed under the terms of the

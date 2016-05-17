@@ -313,7 +313,7 @@ class DialogInline extends Component {
       <div className={className} style={prepareStyles(styles.root)}>
         {open &&
           <EventListener
-            elementName="window"
+            target="window"
             onKeyUp={this.handleKeyUp}
             onResize={this.handleResize}
           />
@@ -447,6 +447,10 @@ class Dialog extends Component {
      * Overrides the inline-styles of the title's root container element.
      */
     titleStyle: PropTypes.object,
+  };
+
+  static contextTypes = {
+    muiTheme: PropTypes.object.isRequired,
   };
 
   static defaultProps = {

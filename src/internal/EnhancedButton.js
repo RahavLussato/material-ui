@@ -4,6 +4,7 @@ import Events from '../utils/events';
 import keycode from 'keycode';
 import FocusRipple from './FocusRipple';
 import TouchRipple from './TouchRipple';
+import deprecated from '../utils/deprecatedPropType';
 
 let styleInjected = false;
 let listening = false;
@@ -49,14 +50,24 @@ class EnhancedButton extends Component {
     disabled: PropTypes.bool,
     focusRippleColor: PropTypes.string,
     focusRippleOpacity: PropTypes.number,
+    href: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.bool,
+    ]),
     keyboardFocused: PropTypes.bool,
-    linkButton: PropTypes.bool,
+    linkButton: deprecated(PropTypes.bool, 'LinkButton is no longer required when the `href` property is provided.'),
     onBlur: PropTypes.func,
     onClick: PropTypes.func,
     onFocus: PropTypes.func,
     onKeyDown: PropTypes.func,
     onKeyUp: PropTypes.func,
     onKeyboardFocus: PropTypes.func,
+    onMouseDown: PropTypes.func,
+    onMouseEnter: PropTypes.func,
+    onMouseLeave: PropTypes.func,
+    onMouseUp: PropTypes.func,
+    onTouchEnd: PropTypes.func,
+    onTouchStart: PropTypes.func,
     onTouchTap: PropTypes.func,
     style: PropTypes.object,
     tabIndex: PropTypes.number,
@@ -70,9 +81,15 @@ class EnhancedButton extends Component {
     onBlur: () => {},
     onClick: () => {},
     onFocus: () => {},
-    onKeyboardFocus: () => {},
     onKeyDown: () => {},
     onKeyUp: () => {},
+    onKeyboardFocus: () => {},
+    onMouseDown: () => {},
+    onMouseEnter: () => {},
+    onMouseLeave: () => {},
+    onMouseUp: () => {},
+    onTouchEnd: () => {},
+    onTouchStart: () => {},
     onTouchTap: () => {},
     tabIndex: 0,
     type: 'button',
@@ -94,6 +111,10 @@ class EnhancedButton extends Component {
   componentDidMount() {
     injectStyle();
     listenForTabPresses();
+    if (this.state.isKeyboardFocused) {
+      this.refs.enhancedButton.focus();
+      this.props.onKeyboardFocus(null, true);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -182,6 +203,9 @@ class EnhancedButton extends Component {
       if (keycode(event) === 'enter' && this.state.isKeyboardFocused) {
         this.handleTouchTap(event);
       }
+      if (keycode(event) === 'esc' && this.state.isKeyboardFocused) {
+        this.removeKeyboardFocus(event);
+      }
     }
     this.props.onKeyDown(event);
   };
@@ -210,6 +234,7 @@ class EnhancedButton extends Component {
       this.focusTimeout = setTimeout(() => {
         if (tabPressed) {
           this.setKeyboardFocus(event);
+          tabPressed = false;
         }
       }, 150);
 
@@ -244,7 +269,8 @@ class EnhancedButton extends Component {
       disableTouchRipple, // eslint-disable-line no-unused-vars
       focusRippleColor, // eslint-disable-line no-unused-vars
       focusRippleOpacity, // eslint-disable-line no-unused-vars
-      linkButton,
+      href,
+      linkButton, // eslint-disable-line no-unused-vars
       touchRippleColor, // eslint-disable-line no-unused-vars
       touchRippleOpacity, // eslint-disable-line no-unused-vars
       onBlur, // eslint-disable-line no-unused-vars
@@ -266,15 +292,17 @@ class EnhancedButton extends Component {
 
     const mergedStyles = Object.assign({
       border: 10,
-      background: 'none',
       boxSizing: 'border-box',
       display: 'inline-block',
       fontFamily: this.context.muiTheme.baseTheme.fontFamily,
       WebkitTapHighlightColor: enhancedButton.tapHighlightColor, // Remove mobile color flashing (deprecated)
       cursor: disabled ? 'default' : 'pointer',
       textDecoration: 'none',
+      margin: 0,
+      padding: 0,
       outline: 'none',
-      font: 'inherit',
+      fontSize: 'inherit',
+      fontWeight: 'inherit',
       /**
        * This is needed so that ripples do not bleed
        * past border radius.
@@ -285,7 +313,13 @@ class EnhancedButton extends Component {
       verticalAlign: other.hasOwnProperty('href') ? 'middle' : null,
     }, style);
 
-    if (disabled && linkButton) {
+
+    // Passing both background:none & backgroundColor can break due to object iteration order
+    if (!mergedStyles.backgroundColor && !mergedStyles.background) {
+      mergedStyles.background = 'none';
+    }
+
+    if (disabled && href) {
       return (
         <span
           {...other}
@@ -299,7 +333,9 @@ class EnhancedButton extends Component {
     const buttonProps = {
       ...other,
       style: prepareStyles(mergedStyles),
+      ref: 'enhancedButton',
       disabled: disabled,
+      href: href,
       onBlur: this.handleBlur,
       onClick: this.handleClick,
       onFocus: this.handleFocus,
@@ -311,12 +347,9 @@ class EnhancedButton extends Component {
     };
     const buttonChildren = this.createButtonChildren();
 
-    // Provides backward compatibity. Added to support wrapping around <a> element.
-    const targetLinkElement = buttonProps.hasOwnProperty('href') ? 'a' : 'span';
-
     return React.isValidElement(containerElement) ?
       React.cloneElement(containerElement, buttonProps, buttonChildren) :
-      React.createElement(linkButton ? targetLinkElement : containerElement, buttonProps, buttonChildren);
+      React.createElement(href ? 'a' : containerElement, buttonProps, buttonChildren);
   }
 }
 
